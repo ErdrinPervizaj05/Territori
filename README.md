@@ -141,7 +141,7 @@ This project is open source and available under the MIT License.
 
 ## 👨‍💻 Authors
 
-- **Erdrin Pervizaj** - Initial creator
+- **Erdrin Pervizaj**, **Mendrit Bytyqi**, **Yll Kastrati**- Initial creator
 
 ## 🙋 Support
 
