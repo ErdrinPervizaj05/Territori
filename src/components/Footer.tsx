@@ -124,7 +124,7 @@ export default function Footer() {
             </p>
             <p className="text-xs font-light text-slate-600">
               Made by{" "}
-              <span className="font-semibold text-slate-900">TitanNetwork</span>
+              <span className="font-semibold text-slate-900">Erdrin Pervizaj</span>
             </p>
           </div>
 
