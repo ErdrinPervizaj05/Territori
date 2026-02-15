@@ -2,22 +2,28 @@ import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import logo from "../assets/Territori.png";
 import Footer from "./Footer";
+import ScrollToTop from "./ScrollToTop";
 
 const BRAND = "#0B2A6F"; // premium navy
 
-
-
 const MainLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+
   const authRaw = localStorage.getItem("auth");
   const auth = authRaw ? JSON.parse(authRaw) : null;
   const isLoggedIn = auth?.isLoggedIn;
+
   return (
     <div className="min-h-screen bg-white text-slate-900">
+
+      {/* ✅ SCROLL FIX */}
+      <ScrollToTop />
+
       {/* NAVBAR */}
       <header className="sticky top-0 z-50 border-b border-slate-100 bg-white">
         <nav className="max-w-7xl mx-auto flex items-center px-8 py-6">
-          {/* LOGO (DOMINANT, LUXURY) */}
+          
+          {/* LOGO */}
           <NavLink to="/" className="flex items-center gap-3 shrink-0 group">
             <img
               src={logo}
@@ -29,12 +35,12 @@ const MainLayout = () => {
             </span>
           </NavLink>
 
-          {/* LINKS (ELEGANT + PREMIUM) */}
+          {/* LINKS */}
           <div className="hidden lg:flex items-center gap-16 mx-auto">
             <NavItem to="/" label="Home" />
             <NavItem to="/about" label="About" />
 
-            {/* SERVICES DROPDOWN */}
+            {/* SERVICES */}
             <div className="relative group">
               <NavItem to="/service" label="Services" hasDropdown />
 
@@ -51,141 +57,60 @@ const MainLayout = () => {
             <NavItem to="/contact" label="Contact" />
           </div>
 
-        <div className="hidden lg:flex items-center gap-4 ml-auto shrink-0">
-  {isLoggedIn ? (
-    <>
-      <span className="text-sm text-slate-700">
-        Hi, {auth.name}
-      </span>
+          {/* AUTH BUTTONS */}
+          <div className="hidden lg:flex items-center gap-4 ml-auto shrink-0">
+            {isLoggedIn ? (
+              <>
+                <span className="text-sm text-slate-700">
+                  Hi, {auth.name}
+                </span>
 
-      <button
-        onClick={() => {
-          localStorage.removeItem("auth");
-          window.location.reload(); // simplest way to refresh navbar state
-        }}
-        className="px-6 py-2.5 text-sm font-medium text-white transition-all duration-200 rounded-none hover:opacity-90"
-        style={{ backgroundColor: BRAND }}
-      >
-        Logout
-      </button>
-    </>
-  ) : (
-    <>
-      <NavLink
-        to="/signup"
-        className="px-6 py-2.5 text-sm font-medium text-slate-600 border border-slate-300 hover:border-slate-400 hover:text-slate-900 transition-all duration-200 rounded-none"
-      >
-        Sign Up
-      </NavLink>
-
-      <NavLink
-        to="/login"
-        className="px-6 py-2.5 text-sm font-medium text-white transition-all duration-200 rounded-none hover:opacity-90"
-        style={{ backgroundColor: BRAND }}
-      >
-        Login
-      </NavLink>
-    </>
-  )}
-</div>
-
-
-          {/* MOBILE BUTTON */}
-          <button
-            onClick={() => setMobileOpen((v) => !v)}
-            className="lg:hidden ml-auto px-3 py-2 text-slate-600 hover:text-slate-900 transition"
-            aria-label="Open menu"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M3 6h18M3 12h18M3 18h18"
-              />
-            </svg>
-          </button>
-        </nav>
-
-        {/* MOBILE MENU */}
-        {mobileOpen && (
-          <div className="lg:hidden border-t border-slate-100 bg-white">
-            <div className="px-8 py-6 flex flex-col gap-4">
-              <MobileLink
-                to="/"
-                label="Home"
-                onClick={() => setMobileOpen(false)}
-              />
-              <MobileLink
-                to="/about"
-                label="About"
-                onClick={() => setMobileOpen(false)}
-              />
-              <MobileLink
-                to="/service"
-                label="Services"
-                onClick={() => setMobileOpen(false)}
-              />
-              <div className="pl-4 border-l border-slate-200 flex flex-col gap-3">
-                <MobileLink
-                  to="/service/meqira"
-                  label="For Rent"
-                  onClick={() => setMobileOpen(false)}
-                />
-                <MobileLink
-                  to="/service/neshitje"
-                  label="For Sale"
-                  onClick={() => setMobileOpen(false)}
-                />
-                <MobileLink
-                  to="/service/agjencite"
-                  label="Agencies"
-                  onClick={() => setMobileOpen(false)}
-                />
-                <MobileLink
-                  to="/service/toka"
-                  label="Land"
-                  onClick={() => setMobileOpen(false)}
-                />
-              </div>
-              <MobileLink
-                to="/contact"
-                label="Contact"
-                onClick={() => setMobileOpen(false)}
-              />
-
-              <div className="flex gap-3 pt-4">
+                <button
+                  onClick={() => {
+                    localStorage.removeItem("auth");
+                    window.location.reload();
+                  }}
+                  className="px-6 py-2.5 text-sm font-medium text-white transition-all duration-200 rounded-none hover:opacity-90"
+                  style={{ backgroundColor: BRAND }}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
                 <NavLink
                   to="/signup"
-                  onClick={() => setMobileOpen(false)}
-                  className="flex-1 text-center px-4 py-2.5 text-sm font-medium border border-slate-300 hover:border-slate-400 transition rounded-none"
+                  className="px-6 py-2.5 text-sm font-medium text-slate-600 border border-slate-300 hover:border-slate-400 hover:text-slate-900 transition-all duration-200 rounded-none"
                 >
                   Sign Up
                 </NavLink>
 
                 <NavLink
                   to="/login"
-                  onClick={() => setMobileOpen(false)}
-                  className="flex-1 text-center px-4 py-2.5 text-sm font-medium text-white transition rounded-none"
+                  className="px-6 py-2.5 text-sm font-medium text-white transition-all duration-200 rounded-none hover:opacity-90"
                   style={{ backgroundColor: BRAND }}
                 >
                   Login
                 </NavLink>
-              </div>
-            </div>
+              </>
+            )}
           </div>
-        )}
+
+          {/* MOBILE BUTTON */}
+          <button
+            onClick={() => setMobileOpen((v) => !v)}
+            className="lg:hidden ml-auto px-3 py-2 text-slate-600 hover:text-slate-900 transition"
+          >
+            ☰
+          </button>
+        </nav>
       </header>
 
       {/* ROUTES */}
       <main className="max-w-7xl mx-auto px-8">
         <Outlet />
       </main>
+
       <Footer />
     </div>
   );
@@ -205,74 +130,15 @@ function NavItem({
   hasDropdown?: boolean;
 }) {
   return (
-    <NavLink
-      to={to}
-      className={({ isActive }) =>
-        `group relative inline-flex items-center gap-2 text-sm font-light tracking-wide text-slate-600 hover:text-slate-900 transition-colors duration-200 ${
-          isActive ? "text-slate-900" : ""
-        }`
-      }
-    >
-      {({ isActive }) => (
-        <>
-          <span>{label}</span>
-          {hasDropdown ? (
-            <span className="text-slate-400 text-xs">▾</span>
-          ) : null}
-
-          {/* Elegant underline (active + hover) */}
-          <span
-            className={`absolute left-0 -bottom-1.5 h-px bg-slate-900 transition-all duration-300 ${
-              isActive ? "w-full" : "w-0 group-hover:w-full"
-            }`}
-          />
-        </>
-      )}
+    <NavLink to={to} className="text-sm text-slate-600 hover:text-slate-900">
+      {label}
     </NavLink>
   );
 }
 
 function DropLink({ to, label }: { to: string; label: string }) {
   return (
-    <NavLink
-      to={to}
-      className={({ isActive }) =>
-        `block px-4 py-3 text-sm font-light transition duration-150 ${
-          isActive
-            ? "bg-slate-900 text-white"
-            : "text-slate-700 hover:bg-slate-50"
-        }`
-      }
-    >
-      <div className="flex items-center justify-between">
-        <span>{label}</span>
-        <span className="text-slate-300 text-xs">→</span>
-      </div>
-    </NavLink>
-  );
-}
-
-function MobileLink({
-  to,
-  label,
-  onClick,
-}: {
-  to: string;
-  label: string;
-  onClick: () => void;
-}) {
-  return (
-    <NavLink
-      to={to}
-      onClick={onClick}
-      className={({ isActive }) =>
-        `px-0 py-2 font-light text-sm transition duration-150 ${
-          isActive
-            ? "text-slate-900 font-medium"
-            : "text-slate-600 hover:text-slate-900"
-        }`
-      }
-    >
+    <NavLink to={to} className="block px-4 py-2 hover:bg-slate-100">
       {label}
     </NavLink>
   );

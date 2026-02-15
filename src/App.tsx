@@ -45,7 +45,7 @@ const router = createBrowserRouter([
         path: "service",
         element: <Service />,
         children: [
-          { index: true, element: <div>Zgjedh një shërbim nga menuja.</div> },
+          { index: true},
           { path: "meqira", element: <MeQira /> },
           { path: "neshitje", element: <NeShitjet /> },
           { path: "agjencite", element: <Agjencite /> },
@@ -59,6 +59,10 @@ const router = createBrowserRouter([
 
   { path: "*", element: <NotFound /> },
 ]);
+
+
+
+
 
 export default function App() {
   return <RouterProvider router={router} />;
