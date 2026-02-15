@@ -17,24 +17,30 @@ import Listings from "./components/Listings";
 import ListingDetail from "./components/ListingDetail";
 import PostListing from "./components/PostListing";
 
+import AuthLayout from "./components/AuthLayout";
+import Login from "./Forma/Login";
+import Register from "./Forma/Register";
+
 const router = createBrowserRouter([
+  {
+    element: <AuthLayout />,
+    children: [
+      { path: "/login", element: <Login /> },
+      { path: "/signup", element: <Register /> },
+    ],
+  },
   {
     path: "/",
     element: <MainLayout />,
     children: [
       { index: true, element: <HomeLayout /> },
-
       { path: "about", element: <About /> },
       { path: "contact", element: <Contact /> },
 
-      // Listings
       { path: "listings", element: <Listings /> },
       { path: "listings/:id", element: <ListingDetail /> },
-
-      // Seller form
       { path: "post", element: <PostListing /> },
 
-      // Services (nested)
       {
         path: "service",
         element: <Service />,
@@ -47,11 +53,13 @@ const router = createBrowserRouter([
         ],
       },
 
-      // Optional: 404 inside layout (so navbar stays)
       { path: "*", element: <NotFound /> },
     ],
   },
+
+  { path: "*", element: <NotFound /> },
 ]);
 
-const App = () => <RouterProvider router={router} />;
-export default App;
+export default function App() {
+  return <RouterProvider router={router} />;
+}
