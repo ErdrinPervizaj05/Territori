@@ -15,37 +15,39 @@ const MainLayout = () => {
 
   return (
     <div className="min-h-screen bg-white text-slate-900">
-
       {/* ✅ SCROLL FIX */}
       <ScrollToTop />
 
       {/* NAVBAR */}
       <header className="sticky top-0 z-50 border-b border-slate-100 bg-white">
-        <nav className="max-w-7xl mx-auto flex items-center px-8 py-6">
-          
+        <nav className="max-w-7xl mx-auto flex items-center px-8 py-7">
           {/* LOGO */}
-          <NavLink to="/" className="flex items-center gap-3 shrink-0 group">
+          <NavLink
+            to="/"
+            onClick={() => setMobileOpen(false)}
+            className="flex items-center gap-3 shrink-0 group"
+          >
             <img
               src={logo}
               alt="Territori Logo"
-              className="h-20 w-auto object-contain group-hover:opacity-80 transition-opacity duration-200"
+              className="h-24 md:h-28 w-auto object-contain group-hover:opacity-80 transition-opacity duration-200"
             />
             <span className="text-xl font-light tracking-widest text-slate-900 hidden sm:inline">
               TERRITORI
             </span>
           </NavLink>
 
-          {/* LINKS */}
+          {/* LINKS (DESKTOP) */}
           <div className="hidden lg:flex items-center gap-16 mx-auto">
             <NavItem to="/" label="Home" />
             <NavItem to="/about" label="About" />
 
-            {/* SERVICES */}
+            {/* SERVICES DROPDOWN */}
             <div className="relative group">
               <NavItem to="/service" label="Services" hasDropdown />
 
               <div className="absolute left-1/2 -translate-x-1/2 top-full pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-                <div className="w-56 rounded-sm bg-white border border-slate-200 shadow-lg p-1">
+                <div className="w-56 bg-white border border-slate-200 shadow-lg p-1">
                   <DropLink to="/service/meqira" label="For Rent" />
                   <DropLink to="/service/neshitje" label="For Sale" />
                   <DropLink to="/service/agjencite" label="Agencies" />
@@ -57,13 +59,11 @@ const MainLayout = () => {
             <NavItem to="/contact" label="Contact" />
           </div>
 
-          {/* AUTH BUTTONS */}
+          {/* AUTH BUTTONS (DESKTOP) */}
           <div className="hidden lg:flex items-center gap-4 ml-auto shrink-0">
             {isLoggedIn ? (
               <>
-                <span className="text-sm text-slate-700">
-                  Hi, {auth.name}
-                </span>
+                <span className="text-sm text-slate-700">Hi, {auth.name}</span>
 
                 <button
                   onClick={() => {
@@ -99,15 +99,104 @@ const MainLayout = () => {
           {/* MOBILE BUTTON */}
           <button
             onClick={() => setMobileOpen((v) => !v)}
+            aria-expanded={mobileOpen}
+            aria-label="Open menu"
             className="lg:hidden ml-auto px-3 py-2 text-slate-600 hover:text-slate-900 transition"
           >
             ☰
           </button>
         </nav>
+
+        {/* MOBILE MENU */}
+        {mobileOpen && (
+          <div className="lg:hidden border-t border-slate-100 bg-white">
+            <div className="px-8 py-6 flex flex-col gap-4">
+              <MobileLink
+                to="/"
+                label="Home"
+                onClick={() => setMobileOpen(false)}
+              />
+              <MobileLink
+                to="/about"
+                label="About"
+                onClick={() => setMobileOpen(false)}
+              />
+              <MobileLink
+                to="/service"
+                label="Services"
+                onClick={() => setMobileOpen(false)}
+              />
+
+              <div className="pl-4 border-l border-slate-200 flex flex-col gap-3">
+                <MobileLink
+                  to="/service/meqira"
+                  label="For Rent"
+                  onClick={() => setMobileOpen(false)}
+                />
+                <MobileLink
+                  to="/service/neshitje"
+                  label="For Sale"
+                  onClick={() => setMobileOpen(false)}
+                />
+                <MobileLink
+                  to="/service/agjencite"
+                  label="Agencies"
+                  onClick={() => setMobileOpen(false)}
+                />
+                <MobileLink
+                  to="/service/toka"
+                  label="Land"
+                  onClick={() => setMobileOpen(false)}
+                />
+              </div>
+
+              <MobileLink
+                to="/contact"
+                label="Contact"
+                onClick={() => setMobileOpen(false)}
+              />
+
+              {/* Auth (mobile) */}
+              <div className="flex gap-3 pt-4">
+                {isLoggedIn ? (
+                  <button
+                    onClick={() => {
+                      localStorage.removeItem("auth");
+                      window.location.reload();
+                    }}
+                    className="flex-1 text-center px-4 py-2.5 text-sm font-medium text-white transition rounded-none hover:opacity-90"
+                    style={{ backgroundColor: BRAND }}
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <>
+                    <NavLink
+                      to="/signup"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex-1 text-center px-4 py-2.5 text-sm font-medium border border-slate-300 hover:border-slate-400 transition rounded-none"
+                    >
+                      Sign Up
+                    </NavLink>
+
+                    <NavLink
+                      to="/login"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex-1 text-center px-4 py-2.5 text-sm font-medium text-white transition rounded-none hover:opacity-90"
+                      style={{ backgroundColor: BRAND }}
+                    >
+                      Login
+                    </NavLink>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* ROUTES */}
-      <main className="max-w-7xl mx-auto px-8">
+      <main className="max-w-7xl mx-auto px-8 pt-10">
         <Outlet />
       </main>
 
@@ -130,15 +219,69 @@ function NavItem({
   hasDropdown?: boolean;
 }) {
   return (
-    <NavLink to={to} className="text-sm text-slate-600 hover:text-slate-900">
-      {label}
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        `group relative inline-flex items-center gap-2 text-sm font-light tracking-wide transition-colors duration-200 ${
+          isActive ? "text-slate-900" : "text-slate-600 hover:text-slate-900"
+        }`
+      }
+    >
+      {({ isActive }) => (
+        <>
+          <span>{label}</span>
+
+          {hasDropdown ? <span className="text-slate-400 text-xs">▾</span> : null}
+
+          {/* underline: hover + active */}
+          <span
+            className={`absolute left-0 -bottom-1.5 h-px bg-slate-900 transition-all duration-300 ${
+              isActive ? "w-full" : "w-0 group-hover:w-full"
+            }`}
+          />
+        </>
+      )}
     </NavLink>
   );
 }
 
 function DropLink({ to, label }: { to: string; label: string }) {
   return (
-    <NavLink to={to} className="block px-4 py-2 hover:bg-slate-100">
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        `block px-4 py-3 text-sm font-light transition duration-150 ${
+          isActive ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-50"
+        }`
+      }
+    >
+      <div className="flex items-center justify-between">
+        <span>{label}</span>
+        <span className="text-slate-300 text-xs">→</span>
+      </div>
+    </NavLink>
+  );
+}
+
+function MobileLink({
+  to,
+  label,
+  onClick,
+}: {
+  to: string;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <NavLink
+      to={to}
+      onClick={onClick}
+      className={({ isActive }) =>
+        `px-0 py-2 font-light text-sm transition duration-150 ${
+          isActive ? "text-slate-900 font-medium" : "text-slate-600 hover:text-slate-900"
+        }`
+      }
+    >
       {label}
     </NavLink>
   );

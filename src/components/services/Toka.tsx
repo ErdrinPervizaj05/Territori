@@ -1,26 +1,23 @@
-import { NavLink } from "react-router-dom";
+import ListingCard from "../ListingCard";
+import SectionHeader from "../SectionHeader";
 import { LISTINGS, type Listing } from "../../data/listings";
 
-const BRAND = "#0B2A6F";
-const money = (n: number) => new Intl.NumberFormat("de-DE").format(n);
-
 export default function Toka() {
-  // Placeholder filter (until you add category: "land")
+  // UI-only placeholder filter: bigger area
   const items = LISTINGS.filter((l: Listing) => l.area >= 300);
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-end justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-light tracking-wide text-slate-900">Land</h2>
-          <p className="mt-2 text-slate-500 font-light">
-            Land opportunities for residential and commercial development.
-          </p>
-        </div>
-        <div className="text-sm text-slate-600">
-          <span className="font-semibold text-slate-900">{items.length}</span> results
-        </div>
-      </div>
+    <div className="py-10 space-y-10">
+      <SectionHeader
+        title="Land"
+        subtitle="Land opportunities for residential and commercial development."
+        right={
+          <div className="text-sm text-slate-600">
+            <span className="font-semibold text-slate-900">{items.length}</span>{" "}
+            results
+          </div>
+        }
+      />
 
       {items.length === 0 ? (
         <div className="border border-slate-200 bg-white p-8 text-slate-600">
@@ -29,33 +26,7 @@ export default function Toka() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((l) => (
-            <NavLink
-              key={l.id}
-              to={`/listings/${l.id}`}
-              className="group block overflow-hidden border border-slate-200 bg-white shadow-sm hover:shadow-md transition"
-            >
-              <div className="relative">
-                <img src={l.image} alt={l.title} className="h-52 w-full object-cover" />
-                <span
-                  className="absolute left-4 top-4 px-3 py-1 text-[11px] tracking-[0.18em] uppercase text-white"
-                  style={{ backgroundColor: BRAND }}
-                >
-                  Land
-                </span>
-              </div>
-
-              <div className="p-5 space-y-2">
-                <p className="text-sm font-extrabold text-slate-900">€{money(l.price)}</p>
-                <p className="text-sm font-semibold text-slate-900 line-clamp-1">{l.title}</p>
-                <p className="text-xs font-semibold tracking-[0.14em] uppercase text-slate-500">
-                  {l.city} • {l.area} m²
-                </p>
-
-                <div className="pt-3 text-xs tracking-wider text-slate-500 group-hover:text-slate-900 transition">
-                  VIEW DETAILS →
-                </div>
-              </div>
-            </NavLink>
+            <ListingCard key={l.id} listing={l} />
           ))}
         </div>
       )}
