@@ -5,9 +5,13 @@ import Footer from "./Footer";
 
 const BRAND = "#0B2A6F"; // premium navy
 
+
+
 const MainLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-
+  const authRaw = localStorage.getItem("auth");
+  const auth = authRaw ? JSON.parse(authRaw) : null;
+  const isLoggedIn = auth?.isLoggedIn;
   return (
     <div className="min-h-screen bg-white text-slate-900">
       {/* NAVBAR */}
@@ -47,23 +51,44 @@ const MainLayout = () => {
             <NavItem to="/contact" label="Contact" />
           </div>
 
-          {/* BUTTONS (PREMIUM, MINIMAL) */}
-          <div className="hidden lg:flex items-center gap-4 ml-auto shrink-0">
-            <NavLink
-              to="/signup"
-              className="px-6 py-2.5 text-sm font-medium text-slate-600 border border-slate-300 hover:border-slate-400 hover:text-slate-900 transition-all duration-200 rounded-none"
-            >
-              Sign Up
-            </NavLink>
+        <div className="hidden lg:flex items-center gap-4 ml-auto shrink-0">
+  {isLoggedIn ? (
+    <>
+      <span className="text-sm text-slate-700">
+        Hi, {auth.name}
+      </span>
 
-            <NavLink
-              to="/login"
-              className="px-6 py-2.5 text-sm font-medium text-white transition-all duration-200 rounded-none hover:opacity-90"
-              style={{ backgroundColor: BRAND }}
-            >
-              Login
-            </NavLink>
-          </div>
+      <button
+        onClick={() => {
+          localStorage.removeItem("auth");
+          window.location.reload(); // simplest way to refresh navbar state
+        }}
+        className="px-6 py-2.5 text-sm font-medium text-white transition-all duration-200 rounded-none hover:opacity-90"
+        style={{ backgroundColor: BRAND }}
+      >
+        Logout
+      </button>
+    </>
+  ) : (
+    <>
+      <NavLink
+        to="/signup"
+        className="px-6 py-2.5 text-sm font-medium text-slate-600 border border-slate-300 hover:border-slate-400 hover:text-slate-900 transition-all duration-200 rounded-none"
+      >
+        Sign Up
+      </NavLink>
+
+      <NavLink
+        to="/login"
+        className="px-6 py-2.5 text-sm font-medium text-white transition-all duration-200 rounded-none hover:opacity-90"
+        style={{ backgroundColor: BRAND }}
+      >
+        Login
+      </NavLink>
+    </>
+  )}
+</div>
+
 
           {/* MOBILE BUTTON */}
           <button

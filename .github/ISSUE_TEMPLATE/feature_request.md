@@ -1,3 +1,4 @@
+git log --oneline -5
 ---
 name: Feature Request
 about: Suggest an idea for Territori
